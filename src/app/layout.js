@@ -30,28 +30,30 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="gap-[20px] flex">
-          <div className="flex">
+        <div className="gap-[20px] flex content-center justify-between bg-[#13121A] p-[20px] w-[100vw]">
+          <div className="flex gap-[10px]">
             <Logo />
             <h2>Logoipsm</h2>
           </div>
-          <div className="flex">
-            <HomeIcon />
-            <Link href="/">Home</Link>
+          <div className="flex gap-[20px]">
+            <div className="flex gap-[10px]">
+              <HomeIcon />
+              <Link href="/">Home</Link>
+            </div>
+            <div className="flex gap-[10px]">
+              <PortfolioIcon />
+              <Link href="/portfolio">Portfolio</Link>
+            </div>
           </div>
-          <div className="flex">
-            <PortfolioIcon />
-            <Link href="/portfolio">Portfolio</Link>
-          </div>
-          <div className="flex">
-            <div className="flex">
-              <SearchIcon />
+          <div className="flex gap-[20px]">
+            <div className="flex gap-[10px] relative">
+              <SearchIcon className="absolute top-[10px] left-[5px]" />
               <input
-                className="bg-white text-black"
+                className="bg-[#191925] text-white p-[5px] rounded-sm pl-[30px]"
                 placeholder="Search"
               ></input>
             </div>
-            <button>
+            <button className="bg-[#191925] p-[5px] rounded-md">
               <SunIcon />
             </button>
           </div>
