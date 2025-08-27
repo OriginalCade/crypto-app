@@ -3,7 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
-import { Component as Logo } from "../assets/Logo.svg";
+import Logo from "../assets/Logo.svg";
+import HomeIcon from "../assets/Home.svg";
+import PortfolioIcon from "../assets/Portfolio.svg";
+import SearchIcon from "../assets/SearchIcon.svg";
+import SunIcon from "../assets/SunIcon.svg";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,8 +31,30 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="gap-[20px] flex">
-          <Link href="/">Home</Link>
-          <Link href="/portfolio">Portfolio</Link>
+          <div className="flex">
+            <Logo />
+            <h2>Logoipsm</h2>
+          </div>
+          <div className="flex">
+            <HomeIcon />
+            <Link href="/">Home</Link>
+          </div>
+          <div className="flex">
+            <PortfolioIcon />
+            <Link href="/portfolio">Portfolio</Link>
+          </div>
+          <div className="flex">
+            <div className="flex">
+              <SearchIcon />
+              <input
+                className="bg-white text-black"
+                placeholder="Search"
+              ></input>
+            </div>
+            <button>
+              <SunIcon />
+            </button>
+          </div>
         </div>
         {children}
       </body>
