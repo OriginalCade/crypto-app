@@ -1,6 +1,9 @@
+import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+
+import { Component as Logo } from "../assets/Logo.svg";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +28,6 @@ export default function RootLayout({ children }) {
       >
         <div className="gap-[20px] flex">
           <Link href="/">Home</Link>
-          <Link href="/coin/coinId">Coin Page</Link>
           <Link href="/portfolio">Portfolio</Link>
         </div>
         {children}
