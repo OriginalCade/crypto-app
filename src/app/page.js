@@ -4,6 +4,7 @@ import StoreProvider from "./StoreProvider";
 import { useAppSelector } from "@/lib/hooks";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Progress } from "@/components/ui/progress";
 
 const List = () => {
   const todos = useAppSelector((state) => state.todos);
@@ -45,34 +46,55 @@ export default function Home() {
       <main className="m-[20px]">
         <p>{isLoading ? "Fetching data..." : ""}</p>
         <div className="flex gap-[60px] pl-[50px]">
+          <p>#</p>
           <h1>Name</h1>
           <h1>Price</h1>
           <p>1h%</p>
           <p>24h%</p>
           <p>7d%</p>
         </div>
-        {coinList.map((item) => (
-          <div key={item.id} className="flex gap-[20px]">
-            <img src={item.image} className="w-[30px]"></img>
-            <h1>{`${item.name}[${item.symbol.toUpperCase()}]`}</h1>
-            <p>{item.current_price}</p>
-            <p>
-              {item.price_change_percentage_1h_in_currency
-                ? `${item.price_change_percentage_1h_in_currency.toFixed(2)}%`
-                : "null"}
-            </p>
-            <p>
-              {item.price_change_percentage_24h_in_currency
-                ? `${item.price_change_percentage_24h_in_currency.toFixed(2)}%`
-                : "null"}
-            </p>
-            <p>
-              {item.price_change_percentage_7d_in_currency
-                ? `${item.price_change_percentage_7d_in_currency.toFixed(2)}%`
-                : "null"}
-            </p>
-          </div>
-        ))}
+        <div className="flex flex-col gap-[8px]">
+          {coinList.map((item, index) => (
+            <div
+              key={item.id}
+              className="flex gap-[20px] bg-[#191925] p-[20px] rounded-md items-center"
+            >
+              <p>{index + 1}</p>
+              <div className="flex items-center gap-[16px] w-[208px] flex-wrap">
+                <img src={item.image} className="w-[32px]"></img>
+                <h1 className="align-baseline">{`${
+                  item.name
+                }[${item.symbol.toUpperCase()}]`}</h1>
+              </div>
+              <p>{`$${item.current_price.toFixed(2)}`}</p>
+              <p>
+                {item.price_change_percentage_1h_in_currency
+                  ? `${item.price_change_percentage_1h_in_currency.toFixed(2)}%`
+                  : "null"}
+              </p>
+              <p>
+                {item.price_change_percentage_24h_in_currency
+                  ? `${item.price_change_percentage_24h_in_currency.toFixed(
+                      2
+                    )}%`
+                  : "null"}
+              </p>
+              <p>
+                {item.price_change_percentage_7d_in_currency
+                  ? `${item.price_change_percentage_7d_in_currency.toFixed(2)}%`
+                  : "null"}
+              </p>
+              <Progress
+                value={(item.total_volume / item.market_cap) * 100}
+                className="w-[228px] h-[6px]"
+              />
+              <Progress
+                value={(item.circulating_supply / item.total_supply) * 100}
+                className="w-[228px] h-[6px]"
+              />
+            </div>
+          ))}
+        </div>
         <p>{hasError ? "ERROR" : ""}</p>
       </main>
     </StoreProvider>
