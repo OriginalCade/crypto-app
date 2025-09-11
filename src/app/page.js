@@ -5,6 +5,8 @@ import { useAppSelector } from "@/lib/hooks";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import PriceChart from "@/components/charts/PriceChart";
+
 const List = () => {
   const todos = useAppSelector((state) => state.todos);
 
@@ -21,6 +23,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [coinList, setCoinList] = useState([]);
+  const [chartData, setChartData] = useState({});
 
   const fetchCoinListData = async () => {
     try {
@@ -35,13 +38,28 @@ export default function Home() {
     }
   };
 
+  const fetchChartData = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios(
+        "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=180&interval=daily"
+      );
+      setChartData(data);
+      setIsLoading(false);
+    } catch {
+      setHasError(true);
+    }
+  };
+
   useEffect(() => {
     fetchCoinListData();
+    fetchChartData();
   }, []);
 
   return (
     <StoreProvider>
       <List />
+      <div>{chartData ? <PriceChart /> : "fetching chart data..."}</div>
       <main className="m-[20px]">
         <p>{isLoading ? "Fetching data..." : ""}</p>
         <div className="flex gap-[60px] pl-[50px]">
