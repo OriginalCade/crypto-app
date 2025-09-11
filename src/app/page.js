@@ -5,7 +5,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import CoinTable from "@/components/coinTable/coinTable";
+import CoinTable from "@/components/coinTable/CoinTable";
 
 const List = () => {
   const todos = useAppSelector((state) => state.todos);
