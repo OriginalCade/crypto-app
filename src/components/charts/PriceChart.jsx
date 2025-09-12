@@ -31,8 +31,6 @@ const PriceChart = ({ data }) => {
     },
   };
 
-  console.log(chartData);
-
   return (
     <Card>
       <CardHeader>
