@@ -70,22 +70,24 @@ export default function Home() {
   return (
     <StoreProvider>
       <List />
-      <div>
-        {chartData ? (
-          <PriceChart data={chartData.prices} />
-        ) : (
-          "fetching chart data..."
-        )}
-      </div>
-      <div>
-        {chartData ? (
-          <VolumeChart data={chartData.volumes} />
-        ) : (
-          "fetching chart data..."
-        )}
-      </div>
-      <main className="m-[20px]">
+      <main className="m-[20px] w-[100vw]">
         <p>{isLoading ? "Fetching data..." : ""}</p>
+        <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
+          <div className="w-[45%]">
+            {chartData ? (
+              <PriceChart data={chartData.prices} />
+            ) : (
+              "fetching chart data..."
+            )}
+          </div>
+          <div className="w-[45%]">
+            {chartData ? (
+              <VolumeChart data={chartData.volumes} />
+            ) : (
+              "fetching chart data..."
+            )}
+          </div>
+        </div>
         <div className="flex gap-[60px] pl-[50px]">
           <p>#</p>
           <h1>Name</h1>
