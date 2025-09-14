@@ -5,7 +5,6 @@ import { useAppSelector } from "@/lib/hooks";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-
 import PriceChart from "@/components/charts/PriceChart";
 import VolumeChart from "@/components/charts/VolumeChart";
 import CoinTable from "@/components/coinTable/CoinTable";
