@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -27,7 +27,7 @@ const PriceChart = ({ data }) => {
   const chartConfig = {
     price: {
       label: "Price",
-      color: "#7474F299",
+      color: "#7878FA",
     },
   };
 
@@ -41,15 +41,7 @@ const PriceChart = ({ data }) => {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
+          <AreaChart accessibilityLayer data={chartData}>
             <XAxis
               dataKey="date"
               tickLine={false}
@@ -61,12 +53,18 @@ const PriceChart = ({ data }) => {
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
+            <defs>
+              <linearGradient id="fillPrices" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#7878FA" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#7878FA" stopOpacity={0.1} />
+              </linearGradient>
+            </defs>
             <Area
               dataKey="price"
               type="natural"
-              fill="#7474F299"
+              fill="url(#fillPrices)"
               fillOpacity={0.4}
-              stroke="#7474F299"
+              stroke="#7878FA"
             />
           </AreaChart>
         </ChartContainer>

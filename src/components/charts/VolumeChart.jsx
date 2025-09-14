@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -42,19 +42,25 @@ const VolumeChart = ({ data }) => {
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={4}
               axisLine={false}
               tickFormatter={(value) => value.slice(8, 10)}
+              interval={2}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="volume" fill="#9D62D9" radius={8} />
+            <defs>
+              <linearGradient id="fillVolumes" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="10%" stopColor="#9D62D9" stopOpacity={1} />
+                <stop offset="90%" stopColor="#9D62D9" stopOpacity={0.3} />
+              </linearGradient>
+            </defs>
+            <Bar dataKey="volume" fill="url(#fillVolumes)" radius={3} />
           </BarChart>
         </ChartContainer>
       </CardContent>
