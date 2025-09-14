@@ -5,8 +5,10 @@ import { useAppSelector } from "@/lib/hooks";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+
 import PriceChart from "@/components/charts/PriceChart";
 import VolumeChart from "@/components/charts/VolumeChart";
+import CoinTable from "@/components/coinTable/CoinTable";
 
 const List = () => {
   const todos = useAppSelector((state) => state.todos);
@@ -86,34 +88,14 @@ export default function Home() {
       <main className="m-[20px]">
         <p>{isLoading ? "Fetching data..." : ""}</p>
         <div className="flex gap-[60px] pl-[50px]">
+          <p>#</p>
           <h1>Name</h1>
           <h1>Price</h1>
           <p>1h%</p>
           <p>24h%</p>
           <p>7d%</p>
         </div>
-        {coinList.map((item) => (
-          <div key={item.id} className="flex gap-[20px]">
-            <img src={item.image} className="w-[30px]"></img>
-            <h1>{`${item.name}[${item.symbol.toUpperCase()}]`}</h1>
-            <p>{item.current_price}</p>
-            <p>
-              {item.price_change_percentage_1h_in_currency
-                ? `${item.price_change_percentage_1h_in_currency.toFixed(2)}%`
-                : "null"}
-            </p>
-            <p>
-              {item.price_change_percentage_24h_in_currency
-                ? `${item.price_change_percentage_24h_in_currency.toFixed(2)}%`
-                : "null"}
-            </p>
-            <p>
-              {item.price_change_percentage_7d_in_currency
-                ? `${item.price_change_percentage_7d_in_currency.toFixed(2)}%`
-                : "null"}
-            </p>
-          </div>
-        ))}
+        <CoinTable coinList={coinList} />
         <p>{hasError ? "ERROR" : ""}</p>
       </main>
     </StoreProvider>
