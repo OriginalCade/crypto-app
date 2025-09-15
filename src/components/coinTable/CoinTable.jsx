@@ -1,5 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import CoinPercentage from "./CoinPercentage";
+import CoinTableChart from "./CoinTableChart";
 
 const CoinTable = ({ coinList }) => {
   return (
@@ -33,6 +34,9 @@ const CoinTable = ({ coinList }) => {
               value={(item.circulating_supply / item.total_supply) * 100}
               className="w-[228px] h-[6px]"
             />
+            <div className="w-[800px]">
+              <CoinTableChart data={item.sparkline_in_7d.price} />
+            </div>
           </div>
         );
       })}
