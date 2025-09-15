@@ -17,20 +17,26 @@ const CoinTableChart = ({ data }) => {
 
   const chartConfig = {
     desktop: {
-      label: "Desktop",
-      color: "var(--chart-1)",
+      label: "MiniPrice",
+      color: "red",
     },
   };
 
   return (
-    <ChartContainer config={chartConfig} className="h-[40px]">
+    <ChartContainer config={chartConfig} className="h-[50px]">
       <AreaChart accessibilityLayer data={chartData}>
+        <defs>
+          <linearGradient id="fillMiniPrices" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="10%" stopColor="green" stopOpacity={0.9} />
+            <stop offset="80%" stopColor="green" stopOpacity={0} />
+          </linearGradient>
+        </defs>
         <Area
           dataKey="price"
           type="linear"
-          fill="none"
+          fill="url(#fillMiniPrices)"
           fillOpacity={0.4}
-          stroke="red"
+          stroke="green"
         />
       </AreaChart>
     </ChartContainer>
