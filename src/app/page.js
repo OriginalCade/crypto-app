@@ -96,7 +96,9 @@ export default function Home() {
           <p>24h%</p>
           <p>7d%</p>
         </div>
-        <CoinTable coinList={coinList} />
+        <div className="w-[100%]">
+          <CoinTable coinList={coinList} />
+        </div>
         <p>{hasError ? "ERROR" : ""}</p>
       </main>
     </StoreProvider>
