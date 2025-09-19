@@ -1,7 +1,7 @@
 "use client";
 
-import StoreProvider from "./StoreProvider";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { addSelected } from "@/lib/features/selectedCharts";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -26,6 +26,13 @@ export default function Home() {
   const [hasError, setHasError] = useState(false);
   const [coinList, setCoinList] = useState([]);
   const [chartData, setChartData] = useState();
+  const [coinNames, setCoinNames] = useState([]);
+
+  const dispatch = useAppDispatch();
+
+  const handleSelect = (item) => {
+    dispatch(addSelected(item));
+  };
 
   const fetchCoinListData = async () => {
     try {
@@ -34,6 +41,10 @@ export default function Home() {
         "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d"
       );
       setCoinList(data);
+      const names = data.map((item) => {
+        return item.name.toLowerCase();
+      });
+      setCoinNames(names);
       setIsLoading(false);
     } catch {
       setHasError(true);
@@ -68,7 +79,21 @@ export default function Home() {
   }, []);
 
   return (
-    <StoreProvider>
+    <div>
+      <div className="flex gap-2">
+        {coinNames.map((item) => {
+          return (
+            <button
+              key={item}
+              onClick={() => {
+                handleSelect(item);
+              }}
+            >
+              {item}
+            </button>
+          );
+        })}
+      </div>
       <List />
       <main className="m-[20px] w-[100vw]">
         <p>{isLoading ? "Fetching data..." : ""}</p>
@@ -101,6 +126,6 @@ export default function Home() {
         </div>
         <p>{hasError ? "ERROR" : ""}</p>
       </main>
-    </StoreProvider>
+    </div>
   );
 }
