@@ -2,6 +2,8 @@
 
 import { Area, AreaChart, XAxis } from "recharts";
 
+import { useState, useEffect } from "react";
+
 import {
   Card,
   CardContent,
@@ -9,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+import { useAppSelector } from "@/lib/hooks";
 
 /* eslint-disable no-unused-vars */
 import {
@@ -22,7 +26,40 @@ import {
 export const description = "A simple area chart";
 
 const PriceChart = ({ data }) => {
-  const chartData = data;
+  const selectedCharts = useAppSelector((state) => state.selectedCharts);
+
+  const chart1 = selectedCharts[0];
+  const chart2 = selectedCharts[1];
+  const chart3 = selectedCharts[2];
+
+  const chartData1 = data[chart1].prices.map((item) => {
+    const price = item.price ? item.price : "";
+    const date = item.date ? item.date : "";
+    return { [chart1]: price, date: date };
+  });
+
+  const [chartData, setChartData] = useState([...chartData1]);
+
+  const handleChart = () => {
+    if (Object.keys(data).length == 2) {
+      const chartData2 = data[chart2].prices.map((item, index) => {
+        const price = item.price ? item.price : "";
+        return { ...chartData[index], [chart2]: price };
+      });
+      setChartData(chartData2);
+    }
+    if (Object.keys(data).length == 3) {
+      const chartData3 = data[chart3].prices.map((item, index) => {
+        const price = item.price ? item.price : "";
+        return { ...chartData[index], [chart3]: price };
+      });
+      setChartData(chartData3);
+    }
+  };
+
+  useEffect(() => {
+    handleChart();
+  }, [data]);
 
   const chartConfig = {
     price: {
@@ -35,9 +72,7 @@ const PriceChart = ({ data }) => {
     <Card>
       <CardHeader>
         <CardTitle>Price Chart</CardTitle>
-        <CardDescription>
-          {chartData[chartData.length - 1].date}
-        </CardDescription>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -60,11 +95,25 @@ const PriceChart = ({ data }) => {
               </linearGradient>
             </defs>
             <Area
-              dataKey="price"
+              dataKey={`${chart1}`}
               type="natural"
               fill="url(#fillPrices)"
               fillOpacity={0.4}
               stroke="#7878FA"
+            />
+            <Area
+              dataKey={`${chart2}`}
+              type="natural"
+              fill="red"
+              fillOpacity={0.4}
+              stroke="red"
+            />
+            <Area
+              dataKey={`${chart3}`}
+              type="natural"
+              fill="yellow"
+              fillOpacity={0.4}
+              stroke="yellow"
             />
           </AreaChart>
         </ChartContainer>

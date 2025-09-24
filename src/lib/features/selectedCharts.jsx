@@ -2,7 +2,7 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 
 const ADD_SELECTED = "ADD_SELECTED";
 
-const selectedChartsReducer = createReducer([], (builder) => {
+const selectedChartsReducer = createReducer(["bitcoin"], (builder) => {
   builder.addCase("ADD_SELECTED", (state, action) => {
     if (!state.includes(action.payload)) {
       if (state.length < 3) {

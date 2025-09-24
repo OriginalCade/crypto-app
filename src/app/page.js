@@ -25,9 +25,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [coinList, setCoinList] = useState([]);
-  const [chartData, setChartData] = useState();
+  const [chartData, setChartData] = useState({});
   const [coinNames, setCoinNames] = useState([]);
 
+  const selectedCharts = useAppSelector((state) => state.selectedCharts);
   const dispatch = useAppDispatch();
 
   const handleSelect = (item) => {
@@ -42,7 +43,7 @@ export default function Home() {
       );
       setCoinList(data);
       const names = data.map((item) => {
-        return item.name.toLowerCase();
+        return item.id.toLowerCase();
       });
       setCoinNames(names);
       setIsLoading(false);
@@ -51,11 +52,15 @@ export default function Home() {
     }
   };
 
-  const fetchChartData = async () => {
+  const fetchChartData = async (coin) => {
+    const chartKeys = Object.keys(chartData);
+    if (chartKeys) {
+      if (chartKeys.includes(coin)) return;
+    }
     try {
       setIsLoading(true);
       const { data } = await axios(
-        "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily"
+        `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30&interval=daily`
       );
       const priceChartData = data.prices.map((item) => {
         const itemDate = new Date(item[0]).toDateString();
@@ -65,7 +70,11 @@ export default function Home() {
         const itemDate = new Date(item[0]).toDateString();
         return { date: itemDate, volume: item[1] };
       });
-      setChartData({ prices: priceChartData, volumes: volumeChartData });
+      const newChartData = {
+        ...chartData,
+        [coin]: { prices: priceChartData, volumes: volumeChartData },
+      };
+      setChartData(newChartData);
       setIsLoading(false);
     } catch {
       setHasError(true);
@@ -73,10 +82,16 @@ export default function Home() {
     }
   };
 
+  const handleChartFetch = () => {
+    selectedCharts.forEach((item) => {
+      fetchChartData(item);
+    });
+  };
+
   useEffect(() => {
     fetchCoinListData();
-    fetchChartData();
-  }, []);
+    handleChartFetch();
+  }, [selectedCharts]);
 
   return (
     <div>
@@ -88,6 +103,7 @@ export default function Home() {
               onClick={() => {
                 handleSelect(item);
               }}
+              className={selectedCharts.includes(item) ? "text-green-500" : ""}
             >
               {item}
             </button>
@@ -99,15 +115,15 @@ export default function Home() {
         <p>{isLoading ? "Fetching data..." : ""}</p>
         <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
           <div className="w-[45%]">
-            {chartData ? (
-              <PriceChart data={chartData.prices} />
+            {Object.keys(chartData).length ? (
+              <PriceChart data={chartData} />
             ) : (
               "fetching chart data..."
             )}
           </div>
           <div className="w-[45%]">
-            {chartData ? (
-              <VolumeChart data={chartData.volumes} />
+            {Object.keys(chartData).length ? (
+              <VolumeChart data={chartData} />
             ) : (
               "fetching chart data..."
             )}
