@@ -8,6 +8,8 @@ import axios from "axios";
 import PriceChart from "@/components/charts/PriceChart";
 import VolumeChart from "@/components/charts/VolumeChart";
 import CoinTable from "@/components/coinTable/CoinTable";
+import CoinPercentage from "@/components/coinTable/CoinPercentage";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const List = () => {
   const todos = useAppSelector((state) => state.todos);
@@ -94,23 +96,39 @@ export default function Home() {
   }, [selectedCharts]);
 
   return (
-    <div>
-      <div className="flex gap-2">
-        {coinNames.map((item) => {
-          return (
-            <button
-              key={item}
-              onClick={() => {
-                handleSelect(item);
-              }}
-              className={selectedCharts.includes(item) ? "text-green-500" : ""}
-            >
-              {item}
-            </button>
-          );
-        })}
-      </div>
-      <List />
+    <div className="flex-col flex justify-center items-center">
+      <ScrollArea className="flex whitespace-nowrap w-[90%] rounded-sm">
+        <div className="flex gap-2 w-max">
+          {coinList.map((item) => {
+            const priceChange1h = item.price_change_percentage_1h_in_currency;
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  handleSelect(item.id);
+                }}
+                className={
+                  selectedCharts.includes(item.id)
+                    ? "bg-[#6161D680] rounded-sm p-[10px]"
+                    : "bg-[#191925] rounded-sm p-[10px]"
+                }
+              >
+                <div className="flex gap-2 items-center">
+                  <img src={item.image} className="w-[32px] h-[32px]" />
+                  <div>
+                    <h2 className="text-[15px]">{`${
+                      item.name
+                    } (${item.symbol.toUpperCase()})`}</h2>
+                    <p className="text-[#D1D1D1] text-[13px]">{`${item.current_price} USD`}</p>
+                  </div>
+                  <CoinPercentage price_percentage={priceChange1h} />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <main className="m-[20px] w-[100vw]">
         <p>{isLoading ? "Fetching data..." : ""}</p>
         <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
