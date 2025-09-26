@@ -11,24 +11,11 @@ import CoinTable from "@/components/coinTable/CoinTable";
 import CoinPercentage from "@/components/coinTable/CoinPercentage";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-const List = () => {
-  const todos = useAppSelector((state) => state.todos);
-
-  return (
-    <div>
-      {todos.map((item) => {
-        return <p key={item.id}>{item.task}</p>;
-      })}
-    </div>
-  );
-};
-
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [coinList, setCoinList] = useState([]);
   const [chartData, setChartData] = useState({});
-  const [coinNames, setCoinNames] = useState([]);
 
   const selectedCharts = useAppSelector((state) => state.selectedCharts);
   const dispatch = useAppDispatch();
@@ -44,10 +31,6 @@ export default function Home() {
         "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d"
       );
       setCoinList(data);
-      const names = data.map((item) => {
-        return item.id.toLowerCase();
-      });
-      setCoinNames(names);
       setIsLoading(false);
     } catch {
       setHasError(true);
