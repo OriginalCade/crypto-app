@@ -2,6 +2,7 @@ import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import StoreProvider from "./StoreProvider";
 
 import Logo from "../assets/Logo.svg";
 import HomeIcon from "../assets/Home.svg";
@@ -26,40 +27,42 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="gap-[20px] flex content-center justify-between bg-[#13121A] p-[20px] w-[100vw]">
-          <div className="flex gap-[10px]">
-            <Logo />
-            <h2>Logoipsm</h2>
-          </div>
-          <div className="flex gap-[20px]">
+    <StoreProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <div className="gap-[20px] flex content-center justify-between bg-[#13121A] p-[20px] w-[100vw]">
             <div className="flex gap-[10px]">
-              <HomeIcon />
-              <Link href="/">Home</Link>
+              <Logo />
+              <h2>Logoipsm</h2>
             </div>
-            <div className="flex gap-[10px]">
-              <PortfolioIcon />
-              <Link href="/portfolio">Portfolio</Link>
+            <div className="flex gap-[20px]">
+              <div className="flex gap-[10px]">
+                <HomeIcon />
+                <Link href="/">Home</Link>
+              </div>
+              <div className="flex gap-[10px]">
+                <PortfolioIcon />
+                <Link href="/portfolio">Portfolio</Link>
+              </div>
+            </div>
+            <div className="flex gap-[20px]">
+              <div className="flex gap-[10px] relative">
+                <SearchIcon className="absolute top-[10px] left-[5px]" />
+                <input
+                  className="bg-[#191925] text-white p-[5px] rounded-sm pl-[30px]"
+                  placeholder="Search"
+                ></input>
+              </div>
+              <button className="bg-[#191925] p-[5px] rounded-md">
+                <SunIcon />
+              </button>
             </div>
           </div>
-          <div className="flex gap-[20px]">
-            <div className="flex gap-[10px] relative">
-              <SearchIcon className="absolute top-[10px] left-[5px]" />
-              <input
-                className="bg-[#191925] text-white p-[5px] rounded-sm pl-[30px]"
-                placeholder="Search"
-              ></input>
-            </div>
-            <button className="bg-[#191925] p-[5px] rounded-md">
-              <SunIcon />
-            </button>
-          </div>
-        </div>
-        {children}
-      </body>
-    </html>
+          {children}
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
