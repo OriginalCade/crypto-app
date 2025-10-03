@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import axios from "axios";
 
-import CoinLink from "@/components/coinPage/coinLink";
+import CoinLink from "@/components/CoinPage/CoinLink";
 
 import { Progress } from "@/components/ui/progress";
 
