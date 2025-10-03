@@ -10,6 +10,8 @@ import PortfolioIcon from "../assets/Portfolio.svg";
 import SearchIcon from "../assets/SearchIcon.svg";
 import SunIcon from "../assets/SunIcon.svg";
 
+import { Toaster } from "@/components/ui/sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -59,6 +61,7 @@ export default function RootLayout({ children }) {
                 <SunIcon />
               </button>
             </div>
+            <Toaster />
           </div>
           {children}
         </body>

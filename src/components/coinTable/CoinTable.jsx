@@ -1,6 +1,7 @@
 import { Progress } from "@/components/ui/progress";
 import CoinPercentage from "./CoinPercentage";
 import CoinTableChart from "./CoinTableChart";
+import Link from "next/link";
 
 const CoinTable = ({ coinList }) => {
   return (
@@ -11,8 +12,9 @@ const CoinTable = ({ coinList }) => {
         const priceChange7d = item.price_change_percentage_7d_in_currency;
 
         return (
-          <div
+          <Link
             key={item.id}
+            href={`/coin/${item.id}`}
             className="flex gap-[20px] bg-[#191925] p-[20px] rounded-md items-center"
           >
             <p>{index + 1}</p>
@@ -37,7 +39,7 @@ const CoinTable = ({ coinList }) => {
             <div className="w-[800px]">
               <CoinTableChart data={item.sparkline_in_7d.price} />
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>
