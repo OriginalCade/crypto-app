@@ -8,7 +8,7 @@ import CoinLink from "@/components/coinPage/CoinLink";
 import { Progress } from "@/components/ui/progress";
 
 const CoinPage = ({ params }) => {
-  const coinId = use(params).coinId;
+  const { coinId } = use(params);
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
