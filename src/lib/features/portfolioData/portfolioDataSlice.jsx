@@ -3,10 +3,10 @@ import axios from "axios";
 
 export const fetchPortfolioData = createAsyncThunk(
   "portfolioData/fetchPortfolioData",
-  async (coinName, thunkAPI) => {
+  async (coin, thunkAPI) => {
     try {
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinName}&order=market_cap_desc&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coin.coinName}&order=market_cap_desc&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`
       );
       return response.data;
     } catch (error) {
@@ -19,7 +19,7 @@ const portfolioDataSlice = createSlice({
   name: "portfolioData",
   initialState: {
     data: {
-      coins: [],
+      coins: {},
     },
     status: "idle",
     error: false,
@@ -32,7 +32,7 @@ const portfolioDataSlice = createSlice({
       })
       .addCase(fetchPortfolioData.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data.coins.push(action.payload[0]);
+        state.data.coins[action.meta.arg.coinNum] = { ...action.payload[0] };
       })
       .addCase(fetchPortfolioData.rejected, (state, action) => {
         state.status = "failed";

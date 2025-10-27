@@ -10,14 +10,14 @@ const PortfolioPage = () => {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchPortfolioData("bitcoin"));
-      dispatch(fetchPortfolioData("ethereum"));
+      dispatch(fetchPortfolioData({ coinNum: "coin1", coinName: "bitcoin" }));
+      dispatch(fetchPortfolioData({ coinNum: "coin2", coinName: "ethereum" }));
     }
-  }, [status, dispatch]);
+  }, [status]);
   return (
     <div>
-      <h1>{data.coins[0] ? data.coins[0].name : "loading..."}</h1>
-      <h1>{data.coins[1] ? data.coins[1].name : "loading..."}</h1>
+      <h1>{status == "succeeded" ? data.coins.coin1?.name : "loading..."}</h1>
+      <h1>{status == "succeeded" ? data.coins.coin2?.name : "loading..."}</h1>
     </div>
   );
 };
