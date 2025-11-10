@@ -90,11 +90,12 @@ const PortfolioPage = () => {
   }, [currentCoinNames]);
   return (
     <div>
-      <div>
-        {allDataLoaded && loading === false ? <UserCoinList data={data} /> : ""}
-      </div>
       <AlertDialog>
-        <AlertDialogTrigger>Open</AlertDialogTrigger>
+        <AlertDialogTrigger
+          className={"bg-[#7878FA] rounded-sm p-[10px] m-[10px]"}
+        >
+          Add Coin
+        </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Add your coin</AlertDialogTitle>
@@ -116,6 +117,9 @@ const PortfolioPage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <div>
+        {allDataLoaded && loading === false ? <UserCoinList data={data} /> : ""}
+      </div>
     </div>
   );
 };
