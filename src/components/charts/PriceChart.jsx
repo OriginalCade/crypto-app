@@ -31,7 +31,6 @@ const PriceChart = ({ data }) => {
   const chart1 = selectedCharts[0];
   const chart2 = selectedCharts[1];
   const chart3 = selectedCharts[2];
-
   const chartData1 = data[chart1].prices.map((item) => {
     const price = item.price ? item.price : "";
     const date = item.date ? item.date : "";
