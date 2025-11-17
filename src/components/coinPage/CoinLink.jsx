@@ -9,7 +9,7 @@ const CoinLink = ({ link }) => {
   };
 
   return (
-    <div className="w-full h-[52px] bg-[#1E1932] flex justify-between items-center rounded-md p-[16px 24px]">
+    <div className="w-full h-[52px] bg-white dark:bg-[#1E1932] flex justify-between items-center rounded-md p-[16px 24px]">
       <a target="_blank" rel="noreferrer" href={link}>
         <LinkIcon />
       </a>

@@ -1,16 +1,10 @@
 import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import StoreProvider from "./StoreProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
-import Logo from "../assets/Logo.svg";
-import HomeIcon from "../assets/Home.svg";
-import PortfolioIcon from "../assets/Portfolio.svg";
-import SearchIcon from "../assets/SearchIcon.svg";
-import SunIcon from "../assets/SunIcon.svg";
-
-import { Toaster } from "@/components/ui/sonner";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,40 +24,21 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <StoreProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <div className="gap-[20px] flex content-center justify-between bg-[#13121A] p-[20px] w-[100vw]">
-            <div className="flex gap-[10px]">
-              <Logo />
-              <h2>Logoipsm</h2>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div>
+              <Navbar />
+              {children}
             </div>
-            <div className="flex gap-[20px]">
-              <div className="flex gap-[10px]">
-                <HomeIcon />
-                <Link href="/">Home</Link>
-              </div>
-              <div className="flex gap-[10px]">
-                <PortfolioIcon />
-                <Link href="/portfolio">Portfolio</Link>
-              </div>
-            </div>
-            <div className="flex gap-[20px]">
-              <div className="flex gap-[10px] relative">
-                <SearchIcon className="absolute top-[10px] left-[5px]" />
-                <input
-                  className="bg-[#191925] text-white p-[5px] rounded-sm pl-[30px]"
-                  placeholder="Search"
-                ></input>
-              </div>
-              <button className="bg-[#191925] p-[5px] rounded-md">
-                <SunIcon />
-              </button>
-            </div>
-            <Toaster />
-          </div>
-          {children}
+          </ThemeProvider>
         </body>
       </html>
     </StoreProvider>
