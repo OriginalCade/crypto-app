@@ -130,15 +130,18 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="flex gap-[60px] pl-[50px] text-black dark:text-white">
+        <div className="flex justify-center gap-[60px] pl-[50px] text-black dark:text-white">
           <p>#</p>
           <h1>Name</h1>
           <h1>Price</h1>
           <p>1h%</p>
           <p>24h%</p>
           <p>7d%</p>
+          <p>24h volume / Market cap</p>
+          <p>Circulating / Total supply</p>
+          <p>Last 7d</p>
         </div>
-        <div className="w-[100%]">
+        <div className="w-[100%] flex justify-center">
           <CoinTable coinList={coinList} />
         </div>
         <p>{hasError ? "ERROR" : ""}</p>

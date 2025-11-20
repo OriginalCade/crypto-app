@@ -16,37 +16,39 @@ const Navbar = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="gap-[20px] flex content-center justify-between bg-white dark:bg-background p-[20px] w-[100vw] text-[#353570] dark:text-white">
-      <div className="flex gap-[10px]">
-        <Logo />
-        <h2>Logoipsm</h2>
-      </div>
-      <div className="flex gap-[20px]">
+    <div className="mb-[20px]">
+      <div className="gap-[20px] flex items-center justify-between bg-white dark:bg-background pb-[20px] pt-[20px] pr-[5vw] pl-[5vw] w-[100vw] text-[#353570] dark:text-white">
         <div className="flex gap-[10px]">
-          <HomeIcon />
-          <Link href="/">Home</Link>
+          <Logo />
+          <h2>Coinipsum</h2>
         </div>
-        <div className="flex gap-[10px]">
-          <PortfolioIcon />
-          <Link href="/portfolio">Portfolio</Link>
+        <div className="flex gap-[20px]">
+          <div className="flex gap-[10px]">
+            <HomeIcon />
+            <Link href="/">Home</Link>
+          </div>
+          <div className="flex gap-[10px]">
+            <PortfolioIcon />
+            <Link href="/portfolio">Portfolio</Link>
+          </div>
         </div>
-      </div>
-      <div className="flex gap-[20px]">
-        <div className="flex gap-[10px] relative">
-          <SearchIcon className="absolute top-[10px] left-[5px]" />
-          <input
-            className="bg-[#CCCCFA] dark:bg-[#191925] dark:text-white p-[5px] rounded-sm pl-[30px]"
-            placeholder="Search"
-          ></input>
+        <div className="flex gap-[20px]">
+          <div className="flex gap-[10px] relative">
+            <SearchIcon className="absolute top-[15px] left-[10px]" />
+            <input
+              className="bg-[#CCCCFA] dark:bg-[#191925] dark:text-white p-[5px] rounded-sm pl-[40px] pb-[10px] pt-[10px] w-[350px]"
+              placeholder="Search"
+            ></input>
+          </div>
+          <button
+            className="bg-[#CCCCFA] dark:bg-[#191925] p-[10px] rounded-md"
+            onClick={() =>
+              theme === "dark" ? setTheme("light") : setTheme("dark")
+            }
+          >
+            <SunIcon />
+          </button>
         </div>
-        <button
-          className="bg-[#CCCCFA] dark:bg-[#191925] p-[5px] rounded-md"
-          onClick={() =>
-            theme === "dark" ? setTheme("light") : setTheme("dark")
-          }
-        >
-          <SunIcon />
-        </button>
       </div>
       <Toaster />
     </div>

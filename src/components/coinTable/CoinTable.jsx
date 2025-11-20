@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const CoinTable = ({ coinList }) => {
   return (
-    <div className="flex flex-col gap-[8px]">
+    <div className="flex flex-col gap-[8px] p-[15px] w-[95%]">
       {coinList.map((item, index) => {
         const priceChange1h = item.price_change_percentage_1h_in_currency;
         const priceChange24h = item.price_change_percentage_24h_in_currency;
