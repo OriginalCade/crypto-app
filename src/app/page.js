@@ -79,7 +79,7 @@ export default function Home() {
   }, [selectedCharts]);
 
   return (
-    <div className="flex-col flex justify-center items-center">
+    <div className="flex-col flex justify-center items-center bg-background">
       <ScrollArea className="flex whitespace-nowrap w-[90%] rounded-sm">
         <div className="flex gap-2 w-max">
           {coinList.map((item) => {
@@ -93,7 +93,7 @@ export default function Home() {
                 className={
                   selectedCharts.includes(item.id)
                     ? "bg-[#6161D680] rounded-sm p-[10px]"
-                    : "bg-[#191925] rounded-sm p-[10px]"
+                    : "bg-white dark:bg-[#191925] text-black dark:text-white rounded-sm p-[10px]"
                 }
               >
                 <div className="flex gap-2 items-center">
@@ -112,7 +112,7 @@ export default function Home() {
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <main className="m-[20px] w-[100vw]">
+      <main className="m-[20px] w-[100vw] bg-background">
         <p>{isLoading ? "Fetching data..." : ""}</p>
         <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
           <div className="w-[45%]">
@@ -130,15 +130,18 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="flex gap-[60px] pl-[50px]">
+        <div className="flex justify-center gap-[60px] pl-[50px] text-black dark:text-white">
           <p>#</p>
           <h1>Name</h1>
           <h1>Price</h1>
           <p>1h%</p>
           <p>24h%</p>
           <p>7d%</p>
+          <p>24h volume / Market cap</p>
+          <p>Circulating / Total supply</p>
+          <p>Last 7d</p>
         </div>
-        <div className="w-[100%]">
+        <div className="w-[100%] flex justify-center">
           <CoinTable coinList={coinList} />
         </div>
         <p>{hasError ? "ERROR" : ""}</p>

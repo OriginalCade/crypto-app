@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const CoinTable = ({ coinList }) => {
   return (
-    <div className="flex flex-col gap-[8px]">
+    <div className="flex flex-col gap-[8px] p-[15px] w-[95%]">
       {coinList.map((item, index) => {
         const priceChange1h = item.price_change_percentage_1h_in_currency;
         const priceChange24h = item.price_change_percentage_24h_in_currency;
@@ -15,7 +15,7 @@ const CoinTable = ({ coinList }) => {
           <Link
             key={item.id}
             href={`/coin/${item.id}`}
-            className="flex gap-[20px] bg-[#191925] p-[20px] rounded-md items-center"
+            className="flex gap-[20px] bg-white dark:bg-[#191925] text-black dark:text-white p-[20px] rounded-md items-center justify-center"
           >
             <p>{index + 1}</p>
             <div className="flex items-center gap-[16px] w-[208px] flex-wrap">
@@ -24,7 +24,7 @@ const CoinTable = ({ coinList }) => {
                 item.name
               }[${item.symbol.toUpperCase()}]`}</h1>
             </div>
-            <p>{`$${item.current_price.toFixed(2)}`}</p>
+            <p className="w-[80px]">{`$${item.current_price.toFixed(2)}`}</p>
             <CoinPercentage price_percentage={priceChange1h} />
             <CoinPercentage price_percentage={priceChange24h} />
             <CoinPercentage price_percentage={priceChange7d} />
@@ -36,7 +36,7 @@ const CoinTable = ({ coinList }) => {
               value={(item.circulating_supply / item.total_supply) * 100}
               className="w-[228px] h-[6px]"
             />
-            <div className="w-[800px]">
+            <div>
               <CoinTableChart data={item.sparkline_in_7d.price} />
             </div>
           </Link>

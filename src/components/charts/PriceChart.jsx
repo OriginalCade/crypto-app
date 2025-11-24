@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, XAxis } from "recharts";
+import { Area, AreaChart, XAxis, YAxis } from "recharts";
 
 import { useState, useEffect } from "react";
 
@@ -83,6 +83,14 @@ const PriceChart = ({ data }) => {
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => value.slice(8, 10)}
+              interval={2}
+            />
+            <YAxis
+              domain={["dataMin - 10", "dataMax + 10"]}
+              axisLine={false}
+              tickLine={false}
+              tick={false}
+              width={0}
             />
             <ChartTooltip
               cursor={false}
