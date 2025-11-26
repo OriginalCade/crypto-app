@@ -77,7 +77,6 @@ export default function Home() {
     fetchCoinListData();
     handleChartFetch();
   }, [selectedCharts]);
-
   return (
     <div className="flex-col flex justify-center items-center bg-background">
       <ScrollArea className="flex whitespace-nowrap w-[90%] rounded-sm">

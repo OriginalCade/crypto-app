@@ -85,7 +85,11 @@ const portfolioDataSlice = createSlice({
       })
       .addCase(fetchNewCoin.fulfilled, (state, action) => {
         state.fetchNewCoinStatus = "succeeded";
-        state.data.userCoins[action.meta.arg.coinNum] = action.payload;
+        state.data.userCoins[action.meta.arg.coinNum] = {
+          data: action.payload,
+          date: action.meta.arg.coinDate,
+          amount: action.meta.arg.coinAmount,
+        };
         if (!state.data.currentCoinNames.includes(action.meta.arg.coinName)) {
           state.data.currentCoinNames = [
             ...state.data.currentCoinNames,
