@@ -5,10 +5,6 @@ import CoinPercentage from "../coinTable/CoinPercentage";
 import { Progress } from "../ui/progress";
 
 const UserCoinList = ({ data }) => {
-  function generateId() {
-    return Math.random().toString(36).substring(2, 9);
-  }
-
   return (
     <div className="flex flex-col gap-5">
       {Object.keys(data.userCoins).map((coinId) => {
@@ -18,18 +14,14 @@ const UserCoinList = ({ data }) => {
         const currentCoin = data.currentCoins[coin.id];
 
         if (!coin)
-          return (
-            <div key={generateId()}>coin is either loading or not found</div>
-          );
+          return <div key={coinId}>coin is either loading or not found</div>;
         if (!currentCoin)
           return (
-            <div key={generateId()}>
-              current coin is either loading or not found
-            </div>
+            <div key={coinId}>current coin is either loading or not found</div>
           );
 
         return (
-          <div key={generateId()} className="flex items-center h-[300px]">
+          <div key={coinId} className="flex items-center h-[300px]">
             <div className="bg-[#1E1932] h-[100%] flex flex-col justify-center items-center p-[20px]">
               <div className="p-[30px] bg-[#2C2C4A] rounded-2xl w-[90px]">
                 <img src={coin.image.small} className="w-[30px] h-[30px]" />
