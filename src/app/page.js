@@ -1,9 +1,13 @@
 "use client";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { useSelector, useDispatch } from "react-redux";
 import { addSelected } from "@/lib/features/selectedCharts";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import {
+  fetchCoinListData,
+  fetchChartData,
+} from "@/lib/features/homeData/homeDataSlice";
+import { useEffect } from "react";
 
 import PriceChart from "@/components/charts/PriceChart";
 import VolumeChart from "@/components/charts/VolumeChart";
@@ -12,69 +16,39 @@ import CoinPercentage from "@/components/coinTable/CoinPercentage";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [coinList, setCoinList] = useState([]);
-  const [chartData, setChartData] = useState({});
-
   const selectedCharts = useAppSelector((state) => state.selectedCharts);
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
 
-  const handleSelect = (item) => {
-    dispatch(addSelected(item));
+  const { data, fetchCoinListDataStatus, error } = useSelector(
+    (state) => state.homeData
+  );
+
+  const handleSelect = (coin) => {
+    appDispatch(addSelected(coin));
   };
 
-  const fetchCoinListData = async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d"
-      );
-      setCoinList(data);
-      setIsLoading(false);
-    } catch {
-      setHasError(true);
-    }
-  };
-
-  const fetchChartData = async (coin) => {
-    const chartKeys = Object.keys(chartData);
+  const fetchChartDataFunction = async (coin) => {
+    const chartKeys = Object.keys(data.chartData);
     if (chartKeys) {
       if (chartKeys.includes(coin)) return;
     }
-    try {
-      setIsLoading(true);
-      const { data } = await axios(
-        `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30&interval=daily`
-      );
-      const priceChartData = data.prices.map((item) => {
-        const itemDate = new Date(item[0]).toDateString();
-        return { date: itemDate, price: item[1] };
-      });
-      const volumeChartData = data.total_volumes.map((item) => {
-        const itemDate = new Date(item[0]).toDateString();
-        return { date: itemDate, volume: item[1] };
-      });
-      const newChartData = {
-        ...chartData,
-        [coin]: { prices: priceChartData, volumes: volumeChartData },
-      };
-      setChartData(newChartData);
-      setIsLoading(false);
-    } catch {
-      setHasError(true);
-      setIsLoading(false);
-    }
+    dispatch(fetchChartData(coin));
   };
 
   const handleChartFetch = () => {
     selectedCharts.forEach((item) => {
-      fetchChartData(item);
+      fetchChartDataFunction(item);
     });
   };
 
   useEffect(() => {
-    fetchCoinListData();
+    if (fetchCoinListDataStatus === "idle") {
+      dispatch(fetchCoinListData());
+    }
+  }, [fetchCoinListDataStatus]);
+
+  useEffect(() => {
     handleChartFetch();
   }, [selectedCharts]);
 
@@ -82,7 +56,7 @@ export default function Home() {
     <div className="flex-col flex justify-center items-center bg-background">
       <ScrollArea className="flex whitespace-nowrap w-[90%] rounded-sm">
         <div className="flex gap-2 w-max">
-          {coinList.map((item) => {
+          {data.coinList.map((item) => {
             const priceChange1h = item.price_change_percentage_1h_in_currency;
             return (
               <button
@@ -113,18 +87,18 @@ export default function Home() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <main className="m-[20px] w-[100vw] bg-background">
-        <p>{isLoading ? "Fetching data..." : ""}</p>
+        <p>{fetchCoinListDataStatus === "success" ? "Fetching data..." : ""}</p>
         <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
           <div className="w-[45%]">
-            {Object.keys(chartData).length ? (
-              <PriceChart data={chartData} />
+            {Object.keys(data.chartData).length ? (
+              <PriceChart data={data.chartData} />
             ) : (
               "fetching chart data..."
             )}
           </div>
           <div className="w-[45%]">
-            {Object.keys(chartData).length ? (
-              <VolumeChart data={chartData} />
+            {Object.keys(data.chartData).length ? (
+              <VolumeChart data={data.chartData} />
             ) : (
               "fetching chart data..."
             )}
@@ -142,9 +116,9 @@ export default function Home() {
           <p>Last 7d</p>
         </div>
         <div className="w-[100%] flex justify-center">
-          <CoinTable coinList={coinList} />
+          <CoinTable coinList={data.coinList} />
         </div>
-        <p>{hasError ? "ERROR" : ""}</p>
+        <p>{error ? "ERROR" : ""}</p>
       </main>
     </div>
   );
