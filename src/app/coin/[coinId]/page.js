@@ -17,6 +17,8 @@ const CoinPage = ({ params }) => {
     (state) => state.coinPageData
   );
 
+  const { coin } = data;
+
   useEffect(() => {
     if (fetchCoinDataStatus === "idle") {
       dispatch(fetchCoinData(coinId));
@@ -31,7 +33,7 @@ const CoinPage = ({ params }) => {
 
   return (
     <div>
-      {Object.keys(data.coin).length ? (
+      {Object.keys(coin).length ? (
         <div className="flex flex-col p-[30px] justify-center gap-[30px] text-black dark:text-white">
           <div className="flex p-[30px] justify-center gap-[30px]">
             <h1 className={fetchCoinDataStatus === "loading" ? "" : "hidden"}>
@@ -42,63 +44,59 @@ const CoinPage = ({ params }) => {
               <div className="flex flex-col gap-5">
                 <div className="bg-white dark:bg-[#1E1932] p-[80px] rounded-sm w-full flex flex-col justify-center items-center">
                   <div className="p-[10px] rounded-sm bg-[#efebe9] dark:bg-[#2C2C4A] w-[64px]">
-                    <img src={data.coin.image.small} />
+                    <img src={coin.image.small} />
                   </div>
-                  <h1 className="text-[30px]">{`${data.coin.id}[${data.coin.symbol}]`}</h1>
+                  <h1 className="text-[30px]">{`${coin.id}[${coin.symbol}]`}</h1>
                 </div>
-                <CoinLink link={data.coin.links.homepage[0]} />
+                <CoinLink link={coin.links.homepage[0]} />
               </div>
             </div>
             <div className="w-[30%] h-[350px] flex flex-col gap-5 bg-white dark:bg-[#1E1932] p-[40px] rounded-sm justify-center items-center">
               <div className="flex">
                 <div>
-                  <h1 className="text-[15px]">{`All time high: $${data.coin.market_data.ath.usd}`}</h1>
-                  <p className="text-[12px]">
-                    {data.coin.market_data.ath_date.usd}
-                  </p>
+                  <h1 className="text-[15px]">{`All time high: $${coin.market_data.ath.usd}`}</h1>
+                  <p className="text-[12px]">{coin.market_data.ath_date.usd}</p>
                 </div>
               </div>
               <div className="flex">
                 <div>
-                  <h1 className="text-[15px]">{`All time low: $${data.coin.market_data.atl.usd}`}</h1>
-                  <p className="text-[12px]">
-                    {data.coin.market_data.atl_date.usd}
-                  </p>
+                  <h1 className="text-[15px]">{`All time low: $${coin.market_data.atl.usd}`}</h1>
+                  <p className="text-[12px]">{coin.market_data.atl_date.usd}</p>
                 </div>
               </div>
             </div>
             <div className="w-[40%] bg-white dark:bg-[#1E1932] p-[40px] rounded-sm justify-center items-center flex flex-col">
               <div className="flex gap-[10px]">
                 <h2 className="text-[15px]">Market cap:</h2>
-                <h1>${data.coin.market_data.market_cap.usd}</h1>
+                <h1>${coin.market_data.market_cap.usd}</h1>
               </div>
               <div className="flex gap-[10px]">
                 <h2 className="text-[15px]">FDV:</h2>
-                <h1>${data.coin.market_data.fully_diluted_valuation.usd}</h1>
+                <h1>${coin.market_data.fully_diluted_valuation.usd}</h1>
               </div>
               <div className="flex gap-[10px]">
                 <h2 className="text-[15px]">Volume/Market:</h2>
                 <h1>
-                  {data.coin.market_data.market_cap.usd /
-                    data.coin.market_data.total_volume.usd}
+                  {coin.market_data.market_cap.usd /
+                    coin.market_data.total_volume.usd}
                 </h1>
               </div>
               <div className="flex gap-[10px]">
                 <h2 className="text-[15px]">Total Volume:</h2>
-                <h1>{data.coin.market_data.total_volume.usd}</h1>
+                <h1>{coin.market_data.total_volume.usd}</h1>
               </div>
               <div className="flex gap-[10px]">
                 <h2 className="text-[15px]">Circulating supply</h2>
-                <h1>{data.coin.market_data.circulating_supply}</h1>
+                <h1>{coin.market_data.circulating_supply}</h1>
               </div>
               <div className="flex gap-[10px]">
                 <h2 className="text-[15px]">Max supply</h2>
-                <h1>{data.coin.market_data.max_supply}</h1>
+                <h1>{coin.market_data.max_supply}</h1>
               </div>
               <Progress
                 value={
-                  data.coin.market_data.circulating_supply /
-                  data.coin.market_data.total_supply
+                  coin.market_data.circulating_supply /
+                  coin.market_data.total_supply
                 }
                 className="w-[100px] h-[6px] mt-[30px]"
               />
@@ -107,12 +105,12 @@ const CoinPage = ({ params }) => {
           <div className="flex justify-between w-full">
             <div className="flex flex-col gap-[20px] w-[50%]">
               <h1>Description</h1>
-              <p>{data.coin.description.en}</p>
+              <p>{coin.description.en}</p>
             </div>
             <div className="flex flex-col gap-[30px] w-[40%]">
-              <CoinLink link={data.coin.links.blockchain_site[3]} />
-              <CoinLink link={data.coin.links.blockchain_site[4]} />
-              <CoinLink link={data.coin.links.blockchain_site[5]} />
+              <CoinLink link={coin.links.blockchain_site[3]} />
+              <CoinLink link={coin.links.blockchain_site[4]} />
+              <CoinLink link={coin.links.blockchain_site[5]} />
             </div>
           </div>
         </div>

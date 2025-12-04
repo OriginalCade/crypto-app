@@ -24,6 +24,8 @@ export default function Home() {
     (state) => state.homeData
   );
 
+  const { coinList, chartData } = data;
+
   const handleSelect = (coin) => {
     appDispatch(addSelected(coin));
   };
@@ -56,7 +58,7 @@ export default function Home() {
     <div className="flex-col flex justify-center items-center bg-background">
       <ScrollArea className="flex whitespace-nowrap w-[90%] rounded-sm">
         <div className="flex gap-2 w-max">
-          {data.coinList.map((item) => {
+          {coinList.map((item) => {
             const priceChange1h = item.price_change_percentage_1h_in_currency;
             return (
               <button
@@ -90,15 +92,15 @@ export default function Home() {
         <p>{fetchCoinListDataStatus === "success" ? "Fetching data..." : ""}</p>
         <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
           <div className="w-[45%]">
-            {Object.keys(data.chartData).length ? (
-              <PriceChart data={data.chartData} />
+            {Object.keys(chartData).length ? (
+              <PriceChart data={chartData} />
             ) : (
               "fetching chart data..."
             )}
           </div>
           <div className="w-[45%]">
-            {Object.keys(data.chartData).length ? (
-              <VolumeChart data={data.chartData} />
+            {Object.keys(chartData).length ? (
+              <VolumeChart data={chartData} />
             ) : (
               "fetching chart data..."
             )}
@@ -116,7 +118,7 @@ export default function Home() {
           <p>Last 7d</p>
         </div>
         <div className="w-[100%] flex justify-center">
-          <CoinTable coinList={data.coinList} />
+          <CoinTable coinList={coinList} />
         </div>
         <p>{error ? "ERROR" : ""}</p>
       </main>
