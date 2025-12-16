@@ -75,7 +75,7 @@ export default function Home() {
             const priceChange1h = item.price_change_percentage_1h_in_currency;
             return (
               <button
-                key={item.symbol}
+                key={item.name}
                 onClick={() => {
                   handleSelect(item.id);
                 }}
