@@ -6,6 +6,7 @@ import { addSelected } from "@/lib/features/selectedCharts";
 import {
   fetchCoinListData,
   fetchChartData,
+  increasePage,
 } from "@/lib/features/homeData/homeDataSlice";
 import { useEffect } from "react";
 
@@ -14,17 +15,20 @@ import VolumeChart from "@/components/charts/VolumeChart";
 import CoinTable from "@/components/coinTable/CoinTable";
 import CoinPercentage from "@/components/coinTable/CoinPercentage";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function Home() {
   const selectedCharts = useAppSelector((state) => state.selectedCharts);
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
 
-  const { data, fetchCoinListDataStatus, error } = useSelector(
+  const { data, fetchCoinListDataStatus, error, coinListPage } = useSelector(
     (state) => state.homeData
   );
 
   const { coinList, chartData } = data;
+
+  const { currency } = useSelector((state) => state.navbarData);
 
   const handleSelect = (coin) => {
     appDispatch(addSelected(coin));
@@ -44,11 +48,21 @@ export default function Home() {
     });
   };
 
-  useEffect(() => {
-    if (fetchCoinListDataStatus === "idle") {
-      dispatch(fetchCoinListData());
+  const handleCoinListFetch = () => {
+    if (fetchCoinListDataStatus !== "loading") {
+      dispatch(
+        fetchCoinListData({
+          currency: currency,
+          page: coinListPage,
+        })
+      );
     }
-  }, [fetchCoinListDataStatus]);
+    dispatch(increasePage());
+  };
+
+  useEffect(() => {
+    handleCoinListFetch();
+  }, [currency]);
 
   useEffect(() => {
     handleChartFetch();
@@ -61,7 +75,7 @@ export default function Home() {
             const priceChange1h = item.price_change_percentage_1h_in_currency;
             return (
               <button
-                key={item.id}
+                key={item.symbol}
                 onClick={() => {
                   handleSelect(item.id);
                 }}
@@ -117,7 +131,14 @@ export default function Home() {
           <p>Last 7d</p>
         </div>
         <div className="w-[100%] flex justify-center">
-          <CoinTable coinList={coinList} />
+          <InfiniteScroll
+            dataLength={coinList.length}
+            next={() => handleCoinListFetch()}
+            hasMore={true}
+            loader={<h1>Loading...</h1>}
+          >
+            <CoinTable coinList={coinList} />
+          </InfiniteScroll>
         </div>
         <p>{error ? "ERROR" : ""}</p>
       </main>
