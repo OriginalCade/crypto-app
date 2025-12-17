@@ -76,6 +76,9 @@ const portfolioDataSlice = createSlice({
     setSelectedAmount(state, action) {
       state.options.amount = action.payload;
     },
+    setData(state, action) {
+      state.data = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -134,7 +137,7 @@ const portfolioDataSlice = createSlice({
   },
 });
 
-export const { setSelectedCoin, setSelectedDate, setSelectedAmount } =
+export const { setSelectedCoin, setSelectedDate, setSelectedAmount, setData } =
   portfolioDataSlice.actions;
 
 export default portfolioDataSlice.reducer;

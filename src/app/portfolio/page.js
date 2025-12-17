@@ -7,6 +7,7 @@ import {
   fetchNewCoin,
   fetchCurrentCoin,
   setSelectedAmount,
+  setData,
 } from "@/lib/features/portfolioData/portfolioDataSlice";
 
 import {
@@ -27,6 +28,7 @@ import UserCoinList from "@/components/portfolioPage/UserCoinList";
 
 const PortfolioPage = () => {
   const dispatch = useDispatch();
+
   const {
     data,
     fetchNewCoinStatus,
@@ -68,26 +70,30 @@ const PortfolioPage = () => {
   };
 
   useEffect(() => {
-    if (fetchNewCoinStatus === "idle") {
-      dispatch(
-        fetchNewCoin({
-          coinNum: "coin1",
-          coinName: "bitcoin",
-          coinAmount: 12,
-          coinDate: "10-12-2024",
-        })
-      );
-    }
     if (fetchCoinNamesStatus === "idle") {
       dispatch(fetchCoinNames());
     }
-  }, [fetchNewCoinStatus]);
+  }, []);
 
   useEffect(() => {
     if (fetchCurrentCoinStatus === "idle") {
       handleCurrentCoinFetch(dispatch);
     }
   }, [currentCoinNames]);
+
+  useEffect(() => {
+    const localData = localStorage.getItem("portfolioData");
+    if (localData) {
+      dispatch(setData(JSON.parse(localData)));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("portfolioData", JSON.stringify(data));
+    }
+  }, [data]);
+
   return (
     <div>
       <AlertDialog>
@@ -118,7 +124,11 @@ const PortfolioPage = () => {
         </AlertDialogContent>
       </AlertDialog>
       <div>
-        {allDataLoaded && loading === false ? <UserCoinList data={data} /> : ""}
+        {allDataLoaded && loading === false ? (
+          <UserCoinList data={data} coinNames={data.coinNames} />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
