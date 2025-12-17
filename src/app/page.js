@@ -6,6 +6,7 @@ import { addSelected } from "@/lib/features/selectedCharts";
 import {
   fetchCoinListData,
   fetchChartData,
+  increasePage,
 } from "@/lib/features/homeData/homeDataSlice";
 import {
   setBuyingCoin,
@@ -22,6 +23,7 @@ import CoinPercentage from "@/components/coinTable/CoinPercentage";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Combobox } from "@/components/coinConverter/ComboBox";
 import ConverterChart from "@/components/charts/ConverterChart";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function Home() {
   const selectedCharts = useAppSelector((state) => state.selectedCharts);
@@ -45,6 +47,8 @@ export default function Home() {
   const coinNames = coinList.map((item) => {
     return item.id;
   });
+
+  const { currency } = useSelector((state) => state.navbarData);
 
   const handleSelect = (coin) => {
     appDispatch(addSelected(coin));
@@ -79,8 +83,21 @@ export default function Home() {
   useEffect(() => {
     if (fetchCoinListDataStatus === "idle") {
       dispatch(fetchCoinListData());
+  const handleCoinListFetch = () => {
+    if (fetchCoinListDataStatus !== "loading") {
+      dispatch(
+        fetchCoinListData({
+          currency: currency,
+          page: coinListPage,
+        })
+      );
     }
-  }, [fetchCoinListDataStatus]);
+    dispatch(increasePage());
+  };
+
+  useEffect(() => {
+    handleCoinListFetch();
+  }, [currency]);
 
   useEffect(() => {
     handleChartFetch();
@@ -220,6 +237,15 @@ export default function Home() {
               <button
                 className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-white text-black shadow-md hover:scale-105 transition"
                 onClick={() => handleConverterSwap()}
+                key={item.name}
+                onClick={() => {
+                  handleSelect(item.id);
+                }}
+                className={
+                  selectedCharts.includes(item.id)
+                    ? "bg-[#6161D680] rounded-sm p-[10px]"
+                    : "bg-white dark:bg-[#191925] text-black dark:text-white rounded-sm p-[10px]"
+                }
               >
                 ⇅
               </button>
@@ -272,7 +298,29 @@ export default function Home() {
             </h1>
           </div>
         </div>
-      </div>
+        <div className="flex justify-center gap-[60px] pl-[50px] text-black dark:text-white">
+          <p>#</p>
+          <h1>Name</h1>
+          <h1>Price</h1>
+          <p>1h%</p>
+          <p>24h%</p>
+          <p>7d%</p>
+          <p>24h volume / Market cap</p>
+          <p>Circulating / Total supply</p>
+          <p>Last 7d</p>
+        </div>
+        <div className="w-[100%] flex justify-center">
+          <InfiniteScroll
+            dataLength={coinList.length}
+            next={handleCoinListFetch}
+            hasMore={true}
+            loader={<h1>Loading...</h1>}
+          >
+            <CoinTable coinList={coinList} />
+          </InfiniteScroll>
+        </div>
+        <p>{error ? "ERROR" : ""}</p>
+      </main>
     </div>
   );
 }
