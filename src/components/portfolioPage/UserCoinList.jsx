@@ -1,10 +1,47 @@
 "use client";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  setSelectedAmount,
+  fetchNewCoin,
+} from "@/lib/features/portfolioData/portfolioDataSlice";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Combobox } from "./ComboBox";
+import { DatePicker } from "./DatePicker";
+
 import CoinPercentage from "../coinTable/CoinPercentage";
 
 import { Progress } from "../ui/progress";
 
 const UserCoinList = ({ data }) => {
+  const dispatch = useDispatch();
+  const { options } = useSelector((state) => state.portfolioData);
+
+  const handleEditCoin = (coinId) => {
+    if (options.coin !== "" && options.date !== "" && options.amount !== 0) {
+      dispatch(
+        fetchNewCoin({
+          coinNum: `${coinId}`,
+          coinName: options.coin,
+          coinAmount: options.amount,
+          coinDate: options.date,
+        })
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5">
       {Object.keys(data.userCoins).map((coinId) => {
@@ -32,6 +69,35 @@ const UserCoinList = ({ data }) => {
             </div>
             <div className="bg-[#191932] h-[100%]">
               {/* current coin */}
+              <AlertDialog>
+                <AlertDialogTrigger
+                  className={"bg-[#7878FA] rounded-sm p-[10px] m-[10px] ml-140"}
+                >
+                  Edit coin
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Save your edits</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Please select all three options
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <Combobox data={data.coinNames} />
+                  <DatePicker />
+                  <input
+                    type={"number"}
+                    onChange={(e) =>
+                      dispatch(setSelectedAmount(e.target.value))
+                    }
+                  />
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => handleEditCoin(coinId)}>
+                      Add coin
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               <div className="p-[20px] h-[45%] flex items-center">
                 <div className="flex gap-2">
                   <div className="flex flex-col items-center">
