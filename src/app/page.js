@@ -133,7 +133,7 @@ export default function Home() {
         <div className="w-[100%] flex justify-center">
           <InfiniteScroll
             dataLength={coinList.length}
-            next={() => handleCoinListFetch()}
+            next={handleCoinListFetch}
             hasMore={true}
             loader={<h1>Loading...</h1>}
           >
