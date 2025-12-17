@@ -34,6 +34,7 @@ export default function Home() {
     data: homeData,
     fetchCoinListDataStatus,
     error,
+    coinListPage,
   } = useSelector((state) => state.homeData);
 
   const { data: converterData, enabled } = useSelector(
@@ -80,9 +81,6 @@ export default function Home() {
   const sellingCoinData = findCoin(coinList, "id", converterData.sellingCoin);
   const buyingCoinData = findCoin(coinList, "id", converterData.buyingCoin);
 
-  useEffect(() => {
-    if (fetchCoinListDataStatus === "idle") {
-      dispatch(fetchCoinListData());
   const handleCoinListFetch = () => {
     if (fetchCoinListDataStatus !== "loading") {
       dispatch(
@@ -91,8 +89,8 @@ export default function Home() {
           page: coinListPage,
         })
       );
+      dispatch(increasePage());
     }
-    dispatch(increasePage());
   };
 
   useEffect(() => {
@@ -140,7 +138,7 @@ export default function Home() {
                   item.price_change_percentage_1h_in_currency;
                 return (
                   <button
-                    key={item.id}
+                    key={item.name}
                     onClick={() => {
                       handleSelect(item.id);
                     }}
@@ -237,15 +235,6 @@ export default function Home() {
               <button
                 className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-white text-black shadow-md hover:scale-105 transition"
                 onClick={() => handleConverterSwap()}
-                key={item.name}
-                onClick={() => {
-                  handleSelect(item.id);
-                }}
-                className={
-                  selectedCharts.includes(item.id)
-                    ? "bg-[#6161D680] rounded-sm p-[10px]"
-                    : "bg-white dark:bg-[#191925] text-black dark:text-white rounded-sm p-[10px]"
-                }
               >
                 ⇅
               </button>
@@ -298,17 +287,6 @@ export default function Home() {
             </h1>
           </div>
         </div>
-        <div className="flex justify-center gap-[60px] pl-[50px] text-black dark:text-white">
-          <p>#</p>
-          <h1>Name</h1>
-          <h1>Price</h1>
-          <p>1h%</p>
-          <p>24h%</p>
-          <p>7d%</p>
-          <p>24h volume / Market cap</p>
-          <p>Circulating / Total supply</p>
-          <p>Last 7d</p>
-        </div>
         <div className="w-[100%] flex justify-center">
           <InfiniteScroll
             dataLength={coinList.length}
@@ -320,7 +298,7 @@ export default function Home() {
           </InfiniteScroll>
         </div>
         <p>{error ? "ERROR" : ""}</p>
-      </main>
+      </div>
     </div>
   );
 }
