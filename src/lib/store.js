@@ -4,6 +4,7 @@ import selectedChartsReducer from "./features/selectedCharts";
 import portfolioDataReducer from "./features/portfolioData/portfolioDataSlice";
 import homeDataReducer from "./features/homeData/homeDataSlice";
 import coinPageDataReducer from "./features/coinPageData/coinPageDataSlice";
+import converterDataReducer from "./features/converterData/converterDataSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
       portfolioData: portfolioDataReducer,
       homeData: homeDataReducer,
       coinPageData: coinPageDataReducer,
+      converterData: converterDataReducer,
     },
   });
 };
