@@ -89,9 +89,7 @@ const PortfolioPage = () => {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("portfolioData", JSON.stringify(data));
-    }
+    localStorage.setItem("portfolioData", JSON.stringify(data));
   }, [data]);
 
   return (
