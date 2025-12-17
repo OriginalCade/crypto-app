@@ -3,10 +3,10 @@ import axios from "axios";
 
 export const fetchCoinListData = createAsyncThunk(
   "homeData/fetchCoinListData",
-  async (_, thunkAPI) => {
+  async (params, thunkAPI) => {
     try {
       const response = await axios.get(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d"
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${params.currency}&order=market_cap_desc&per_page=50&page=${params.page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d`
       );
       return response.data;
     } catch (error) {
@@ -19,11 +19,9 @@ export const fetchChartData = createAsyncThunk(
   "homeData/fetchChartData",
   async (coin, thunkAPI) => {
     try {
-      /* eslint-disable quotes */
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30&interval=daily`
       );
-      /* eslint-enable quotes */
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -38,14 +36,23 @@ const homeDataSlice = createSlice({
       coinList: [],
       chartData: {},
     },
+    coinListPage: 1,
     fetchCoinListDataStatus: "idle",
     fetchChartDataStatus: "idle",
     error: false,
   },
-  reducers: {},
+  reducers: {
+    resetCoinList(state) {
+      state.coinListPage = 1;
+      state.data.coinList = [];
+    },
+    increasePage(state) {
+      state.coinListPage++;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      //Fetch Coin List Data
+      /* Coin list data */
       .addCase(fetchCoinListData.pending, (state) => {
         state.fetchCoinListDataStatus = "loading";
       })
@@ -57,28 +64,24 @@ const homeDataSlice = createSlice({
         state.fetchCoinListDataStatus = "failed";
         state.error = action.payload || "Something went wrong";
       })
-      //Fetch Chart data
+      /* Chart data */
       .addCase(fetchChartData.pending, (state) => {
         state.fetchChartDataStatus = "loading";
       })
       .addCase(fetchChartData.fulfilled, (state, action) => {
         state.fetchChartDataStatus = "succeeded";
-        const priceChartData = action.payload.prices.map((item) => {
-          const itemDate = new Date(item[0]).toDateString();
-          return { date: itemDate, price: item[1] };
-        });
-        const volumeChartData = action.payload.total_volumes.map((item) => {
-          const itemDate = new Date(item[0]).toDateString();
-          return { date: itemDate, volume: item[1] };
-        });
-        const newChartData = {
-          ...state.data.chartData,
-          [action.meta.arg]: {
-            prices: priceChartData,
-            volumes: volumeChartData,
-          },
+        const priceChartData = action.payload.prices.map((item) => ({
+          date: new Date(item[0]).toDateString(),
+          price: item[1],
+        }));
+        const volumeChartData = action.payload.total_volumes.map((item) => ({
+          date: new Date(item[0]).toDateString(),
+          volume: item[1],
+        }));
+        state.data.chartData[action.meta.arg] = {
+          prices: priceChartData,
+          volumes: volumeChartData,
         };
-        state.data.chartData = newChartData;
       })
       .addCase(fetchChartData.rejected, (state, action) => {
         state.fetchChartDataStatus = "failed";
@@ -87,4 +90,5 @@ const homeDataSlice = createSlice({
   },
 });
 
+export const { resetCoinList, increasePage } = homeDataSlice.actions;
 export default homeDataSlice.reducer;
