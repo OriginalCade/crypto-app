@@ -5,12 +5,10 @@ import { fetchCoinData } from "@/lib/features/coinPageData/coinPageDataSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 import CoinLink from "@/components/coinPage/CoinLink";
-
 import { Progress } from "@/components/ui/progress";
 
 const CoinPage = ({ params }) => {
   const dispatch = useDispatch();
-
   const { coinId } = use(params);
 
   const { data, fetchCoinDataStatus, error } = useSelector(
@@ -20,103 +18,111 @@ const CoinPage = ({ params }) => {
   const { coin } = data;
 
   useEffect(() => {
-    if (fetchCoinDataStatus === "idle") {
+    if (fetchCoinDataStatus !== "loading") {
       dispatch(fetchCoinData(coinId));
     }
-  }, [fetchCoinDataStatus]);
-
-  useEffect(() => {
-    if (fetchCoinDataStatus === "success") {
-      dispatch(fetchCoinData(coinId));
-    }
-  }, []);
+  }, [coinId]);
 
   return (
-    <div>
+    <div className="w-full">
       {Object.keys(coin).length ? (
-        <div className="flex flex-col p-[30px] justify-center gap-[30px] text-black dark:text-white">
-          <div className="flex p-[30px] justify-center gap-[30px]">
+        <div className="flex flex-col gap-6 p-4 md:p-[30px] text-black dark:text-white">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
             <h1 className={fetchCoinDataStatus === "loading" ? "" : "hidden"}>
               Fetching data...
             </h1>
             <h1 className={error ? "" : "hidden"}>Error fetching data</h1>
-            <div className="flex flex-col w-[30%]">
+
+            {/* Coin info */}
+            <div className="w-full md:w-[30%]">
               <div className="flex flex-col gap-5">
-                <div className="bg-white dark:bg-[#1E1932] p-[80px] rounded-sm w-full flex flex-col justify-center items-center">
-                  <div className="p-[10px] rounded-sm bg-[#efebe9] dark:bg-[#2C2C4A] w-[64px]">
-                    <img src={coin.image.small} />
+                <div className="bg-white dark:bg-[#1E1932] p-6 md:p-[80px] rounded-sm flex flex-col items-center">
+                  <div className="p-2 rounded-sm bg-[#efebe9] dark:bg-[#2C2C4A] w-16 h-16 flex items-center justify-center">
+                    <img
+                      src={coin.image.small}
+                      alt={coin.id}
+                      className="max-w-full"
+                    />
                   </div>
-                  <h1 className="text-[30px]">{`${coin.id}[${coin.symbol}]`}</h1>
+                  <h1 className="text-xl md:text-[30px] mt-4 text-center">
+                    {coin.id} [{coin.symbol}]
+                  </h1>
                 </div>
+
                 <CoinLink link={coin.links.homepage[0]} />
               </div>
             </div>
-            <div className="w-[30%] h-[350px] flex flex-col gap-5 bg-white dark:bg-[#1E1932] p-[40px] rounded-sm justify-center items-center">
-              <div className="flex">
-                <div>
-                  <h1 className="text-[15px]">{`All time high: $${coin.market_data.ath.usd}`}</h1>
-                  <p className="text-[12px]">{coin.market_data.ath_date.usd}</p>
-                </div>
+
+            {/* ATH / ATL */}
+            <div className="w-full md:w-[30%] bg-white dark:bg-[#1E1932] p-4 md:p-[40px] rounded-sm flex flex-col gap-6 justify-center">
+              <div>
+                <h1 className="text-sm md:text-[15px]">
+                  All time high: ${coin.market_data.ath.usd}
+                </h1>
+                <p className="text-xs opacity-70">
+                  {coin.market_data.ath_date.usd}
+                </p>
               </div>
-              <div className="flex">
-                <div>
-                  <h1 className="text-[15px]">{`All time low: $${coin.market_data.atl.usd}`}</h1>
-                  <p className="text-[12px]">{coin.market_data.atl_date.usd}</p>
-                </div>
+
+              <div>
+                <h1 className="text-sm md:text-[15px]">
+                  All time low: ${coin.market_data.atl.usd}
+                </h1>
+                <p className="text-xs opacity-70">
+                  {coin.market_data.atl_date.usd}
+                </p>
               </div>
             </div>
-            <div className="w-[40%] bg-white dark:bg-[#1E1932] p-[40px] rounded-sm justify-center items-center flex flex-col">
-              <div className="flex gap-[10px]">
-                <h2 className="text-[15px]">Market cap:</h2>
-                <h1>${coin.market_data.market_cap.usd}</h1>
-              </div>
-              <div className="flex gap-[10px]">
-                <h2 className="text-[15px]">FDV:</h2>
-                <h1>${coin.market_data.fully_diluted_valuation.usd}</h1>
-              </div>
-              <div className="flex gap-[10px]">
-                <h2 className="text-[15px]">Volume/Market:</h2>
-                <h1>
-                  {coin.market_data.market_cap.usd /
-                    coin.market_data.total_volume.usd}
-                </h1>
-              </div>
-              <div className="flex gap-[10px]">
-                <h2 className="text-[15px]">Total Volume:</h2>
-                <h1>{coin.market_data.total_volume.usd}</h1>
-              </div>
-              <div className="flex gap-[10px]">
-                <h2 className="text-[15px]">Circulating supply</h2>
-                <h1>{coin.market_data.circulating_supply}</h1>
-              </div>
-              <div className="flex gap-[10px]">
-                <h2 className="text-[15px]">Max supply</h2>
-                <h1>{coin.market_data.max_supply}</h1>
-              </div>
+
+            {/* Market data */}
+            <div className="w-full md:w-[40%] bg-white dark:bg-[#1E1932] p-4 md:p-[40px] rounded-sm flex flex-col gap-3">
+              {[
+                ["Market cap", coin.market_data.market_cap.usd],
+                ["FDV", coin.market_data.fully_diluted_valuation.usd],
+                [
+                  "Volume / Market",
+                  coin.market_data.market_cap.usd /
+                    coin.market_data.total_volume.usd,
+                ],
+                ["Total Volume", coin.market_data.total_volume.usd],
+                ["Circulating supply", coin.market_data.circulating_supply],
+                ["Max supply", coin.market_data.max_supply],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between gap-4 text-sm">
+                  <span className="opacity-70">{label}</span>
+                  <span className="font-medium truncate">{value}</span>
+                </div>
+              ))}
+
               <Progress
                 value={
-                  coin.market_data.circulating_supply /
-                  coin.market_data.total_supply
+                  (coin.market_data.circulating_supply /
+                    coin.market_data.total_supply) *
+                  100
                 }
-                className="w-[100px] h-[6px] mt-[30px]"
+                className="w-full h-[6px] mt-4"
               />
             </div>
           </div>
-          <div className="flex justify-between w-full">
-            <div className="flex flex-col gap-[20px] w-[50%]">
-              <h1>Description</h1>
-              <p>{coin.description.en}</p>
+
+          {/* Description + links */}
+          <div className="flex flex-col md:flex-row gap-6 justify-between">
+            <div className="w-full md:w-[50%] flex flex-col gap-3">
+              <h1 className="text-lg font-semibold">Description</h1>
+              <p className="text-sm leading-relaxed line-clamp-6 md:line-clamp-none">
+                {coin.description.en}
+              </p>
             </div>
-            <div className="flex flex-col gap-[30px] w-[40%]">
+
+            <div className="w-full md:w-[40%] flex flex-col gap-4">
               <CoinLink link={coin.links.blockchain_site[3]} />
               <CoinLink link={coin.links.blockchain_site[4]} />
               <CoinLink link={coin.links.blockchain_site[5]} />
             </div>
           </div>
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
     </div>
   );
 };

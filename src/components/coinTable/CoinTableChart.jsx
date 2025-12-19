@@ -1,42 +1,50 @@
 "use client";
 
 import { Area, AreaChart } from "recharts";
-
-/* eslint-disable no-unused-vars */
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
-/* eslint-enable no-unused-vars */
-
-export const description = "A linear area chart";
+import { ChartContainer } from "@/components/ui/chart";
 
 const CoinTableChart = ({ data }) => {
-  const chartData = data
-    ? data.map((item, index) => {
-        return { price: item, number: index };
-      })
+  const chartData = Array.isArray(data)
+    ? data.map((price, index) => ({
+        price,
+        index,
+      }))
     : [];
 
+  // determine trend
+  const first = chartData[0]?.price;
+  const last = chartData[chartData.length - 1]?.price;
+
+  const isUp = last >= first;
+
+  const strokeColor = isUp ? "#22c55e" : "#ef4444"; // green / red
+  const gradientId = isUp ? "fillUp" : "fillDown";
+
   const chartConfig = {
-    desktop: {
+    mini: {
       label: "MiniPrice",
-      color: "red",
+      color: strokeColor,
     },
   };
 
   return (
     <ChartContainer config={chartConfig} className="h-[50px]">
-      <AreaChart accessibilityLayer data={chartData}>
+      <AreaChart data={chartData}>
         <defs>
-          <linearGradient id="fillMiniPrices" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="10%" stopColor="green" stopOpacity={0.9} />
-            <stop offset="80%" stopColor="green" stopOpacity={0} />
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={strokeColor} stopOpacity={0.8} />
+            <stop offset="75%" stopColor={strokeColor} stopOpacity={0} />
           </linearGradient>
         </defs>
+
         <Area
           dataKey="price"
-          type="linear"
-          fill="url(#fillMiniPrices)"
-          fillOpacity={0.4}
-          stroke="green"
+          type="monotone"
+          stroke={strokeColor}
+          strokeWidth={2}
+          fill={`url(#${gradientId})`}
+          dot={false}
+          isAnimationActive={false}
         />
       </AreaChart>
     </ChartContainer>
