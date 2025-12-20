@@ -104,7 +104,7 @@ export default function Home() {
     <div>
       {/* MAIN */}
       <div className={enabled ? "" : "hidden"}>
-        <div className="self-start flex justify-center items-center gap-1 ml-18 p-1 rounded-sm dark:bg-[#191925] w-[300px]">
+        <div className="self-start flex justify-center items-center gap-1 ml-8 sm:ml-18 p-1 rounded-sm dark:bg-[#191925] w-[300px]">
           <button
             onClick={() => dispatch(toggleConverter())}
             className="rounded-sm p-1 w-[150px] dark:bg-[#191925] bg-white text-black dark:text-white"
@@ -117,7 +117,7 @@ export default function Home() {
         </div>
       </div>
       <div className={enabled ? "hidden" : ""}>
-        <div className="self-start flex justify-center items-center gap-1 ml-18 mb-10 p-1 rounded-sm dark:bg-[#191925] w-[300px]">
+        <div className="self-start flex justify-center items-center gap-1 ml-8 sm:ml-18 mb-10 p-1 rounded-sm dark:bg-[#191925] w-[300px]">
           <button className="bg-purple-500 rounded-sm p-1 w-[150px]">
             Coins
           </button>
@@ -151,10 +151,11 @@ export default function Home() {
                     <div className="flex gap-2 items-center">
                       <img src={item.image} className="w-[32px] h-[32px]" />
                       <div>
-                        <h2 className="text-[15px]">{`${
+                        <h2 className="text-[15px] hidden sm:block">{`${
                           item.name
                         } (${item.symbol.toUpperCase()})`}</h2>
-                        <p className="text-[#D1D1D1] text-[13px]">{`${item.current_price} USD`}</p>
+                        <h2 className="text-[15px] sm:hidden">{`${item.symbol.toUpperCase()}`}</h2>
+                        <p className="text-[#D1D1D1] text-[13px]">{`$${item.current_price} ${currency}`}</p>
                       </div>
                       <CoinPercentage price_percentage={priceChange1h} />
                     </div>
@@ -168,15 +169,15 @@ export default function Home() {
             <p>
               {fetchCoinListDataStatus === "success" ? "Fetching data..." : ""}
             </p>
-            <div className="w-[100%] flex  justify-center gap-[20px] mb-[40px]">
-              <div className="w-[45%]">
+            <div className="w-[100%] flex flex-col sm:flex-row justify-center items-center gap-[20px] mb-[40px]">
+              <div className="w-[90%] sm:w-[45%]">
                 {Object.keys(chartData).length ? (
                   <PriceChart data={chartData} />
                 ) : (
                   "fetching chart data..."
                 )}
               </div>
-              <div className="w-[45%]">
+              <div className="w-[90%] sm:w-[45%]">
                 {Object.keys(chartData).length ? (
                   <VolumeChart data={chartData} />
                 ) : (
@@ -198,7 +199,7 @@ export default function Home() {
             Currency Converter
           </h1>
 
-          <div className="relative flex w-full max-w-6xl gap-6 px-6">
+          <div className="relative flex flex-col sm:flex-row w-full max-w-6xl gap-6 px-6">
             {/* SELL CARD */}
             <div className="flex-1 rounded-2xl border border-border bg-card dark:bg-gradient-to-br dark:from-[#191932] dark:to-[#0f0f1f] p-6 shadow-lg">
               <p className="text-sm text-muted-foreground mb-4">You sell</p>
@@ -214,7 +215,7 @@ export default function Home() {
                 <input
                   type="number"
                   placeholder="Amount"
-                  className="w-28 bg-transparent text-right text-2xl font-semibold text-black dark:text-white outline-none placeholder:text-muted-foreground"
+                  className="w-10 bg-transparent text-right text-2xl font-semibold text-black dark:text-white outline-none placeholder:text-muted-foreground"
                   onChange={(e) => dispatch(setSellingAmount(e.target.value))}
                 />
               </div>
@@ -252,7 +253,7 @@ export default function Home() {
                   type="buying"
                 />
 
-                <p className="text-2xl font-semibold text-black dark:text-white">
+                <p className="text-2lg font-semibold text-black dark:text-white">
                   {buyingCoinData && sellingCoinData
                     ? (
                         (sellingCoinData.current_price *
@@ -275,7 +276,7 @@ export default function Home() {
             </div>
           </div>
           <div
-            className={`w-[90%] mt-10 ${
+            className={`w-[90%] mt-10 mb-10 ${
               !sellingCoin || !buyingCoin ? "hidden" : ""
             }`}
           >

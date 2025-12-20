@@ -69,7 +69,7 @@ const VolumeChart = ({ data }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Voume Chart</CardTitle>
+        <CardTitle>Volume Chart</CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>

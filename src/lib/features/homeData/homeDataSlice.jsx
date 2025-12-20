@@ -47,7 +47,7 @@ const homeDataSlice = createSlice({
       state.data.coinList = [];
     },
     increasePage(state) {
-      state.coinListPage++;
+      state.coinListPage = state.coinListPage + 1;
     },
   },
   extraReducers: (builder) => {

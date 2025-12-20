@@ -29,11 +29,11 @@ export function Search({ data = [], placeholder = "Select coin..." }) {
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-[200px] justify-between bg-[#CCCCFA66] dark:bg-[#191932]"
+            "w-[50px] sm:w-[200px] justify-between bg-[#CCCCFA66] dark:bg-[#191932]"
           )}
         >
-          <div className="pl-7">{placeholder}</div>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <div className="pl-7 hidden sm:block">{placeholder}</div>
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden sm:block" />
         </Button>
       </PopoverTrigger>
       <PopoverContent

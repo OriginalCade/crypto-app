@@ -78,7 +78,7 @@ const Navbar = () => {
     <div className="mb-[20px] w-full">
       {/* Upper navabr */}
       <div className="w-full bg-[#353570] dark:bg-[#1E1932] text-white px-[5vw] py-[10px] flex items-center justify-center gap-[25px] overflow-x-auto">
-        <div className="flex items-center gap-[8px] whitespace-nowrap">
+        <div className="hidden sm:flex items-center gap-[8px] whitespace-nowrap">
           <CoinIcon />
           <span className="opacity-70">Coins</span>
           <span className="font-semibold">
@@ -86,59 +86,82 @@ const Navbar = () => {
           </span>
         </div>
 
-        <div className="flex items-center gap-[8px] whitespace-nowrap">
+        <div className=" hidden sm:flex items-center gap-[8px] whitespace-nowrap">
           <ExchangeIcon />
           <span className="opacity-70">Exchange</span>
           <span className="font-semibold">{global.markets}</span>
         </div>
 
-        <div className="flex items-center gap-[8px] whitespace-nowrap">
+        <div className="hidden sm:flex items-center gap-[8px] whitespace-nowrap">
           <UpIcon />
           <span className="font-semibold">
             {(global.total_market_cap?.usd / 1e12).toFixed(2)} T
           </span>
         </div>
 
-        <div className="flex items-center gap-[8px] whitespace-nowrap">
-          <span className="font-semibold">
-            ${(global.total_volume?.usd / 1e9).toFixed(2)}B
-          </span>
-          <Progress value={100} className="w-[80px] h-[6px] bg-gray-500/40" />
-        </div>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* TOTAL VOLUME */}
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <span className="text-sm sm:text-base font-semibold">
+              ${(global.total_volume?.usd / 1e9).toFixed(2)}B
+            </span>
+            <Progress
+              value={100}
+              className="w-[32px] sm:w-[60px] h-[5px] sm:h-[6px] bg-gray-500/40"
+            />
+          </div>
 
-        <div className="flex items-center gap-[8px] whitespace-nowrap">
-          <BitcoinIcon />
-          <span className="font-semibold">{btcDominance.toFixed(0)}%</span>
-          <Progress value={btcDominance} className="w-[80px] h-[6px]" />
-        </div>
+          {/* BTC DOMINANCE */}
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <BitcoinIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base font-semibold">
+              {btcDominance.toFixed(0)}%
+            </span>
+            <Progress
+              value={btcDominance}
+              className="w-[40px] sm:w-[80px] h-[5px] sm:h-[6px]"
+            />
+          </div>
 
-        <div className="flex items-center gap-[8px] whitespace-nowrap">
-          <EthereumIcon />
-          <span className="font-semibold">{ethDominance.toFixed(0)}%</span>
-          <Progress value={ethDominance} className="w-[80px] h-[6px]" />
+          {/* ETH DOMINANCE */}
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <EthereumIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base font-semibold">
+              {ethDominance.toFixed(0)}%
+            </span>
+            <Progress
+              value={ethDominance}
+              className="w-[40px] sm:w-[80px] h-[5px] sm:h-[6px]"
+            />
+          </div>
         </div>
       </div>
-      {/* Lower navabr */}
+
+      {/* Lower navbar */}
       <div className="gap-[20px] flex items-center justify-between bg-white dark:bg-background pb-[20px] pt-[20px] pr-[5vw] pl-[5vw] w-[100vw] text-[#353570] dark:text-white overflow-x-auto">
         <div className="flex gap-[10px]">
           <Logo />
-          <h2>Coinipsum</h2>
+          <h2 className="hidden sm:block">Coinipsum</h2>
         </div>
 
         <div className="flex gap-[20px]">
           <div className="flex gap-[10px]">
-            <HomeIcon />
-            <Link href="/">Home</Link>
+            <Link href="/" className="flex gap-1">
+              <HomeIcon />
+              <h1 className="hidden sm:block">Home</h1>
+            </Link>
           </div>
           <div className="flex gap-[10px]">
-            <PortfolioIcon />
-            <Link href="/portfolio">Portfolio</Link>
+            <Link href="/portfolio" className="flex gap-1">
+              <PortfolioIcon />
+              <h1 className="hidden sm:block">Portfolio</h1>
+            </Link>
           </div>
         </div>
 
         <div className="flex gap-[20px]">
           <div className="flex gap-[10px] relative">
-            <SearchIcon className="absolute top-[10px] left-[10px]" />
+            <SearchIcon className="absolute top-[10px] left-[16px] sm:left-[10px]" />
             <Search placeholder="Search" data={coinNames} />
           </div>
           <DropdownMenu>

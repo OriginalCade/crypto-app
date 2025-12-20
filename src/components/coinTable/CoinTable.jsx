@@ -20,19 +20,49 @@ const CoinTable = ({ coinList }) => {
     >
       <TableHeader>
         <TableRow>
-          <TableHead className={"text-black dark:text-white"}>Number</TableHead>
-          <TableHead className={"text-black dark:text-white"}>Name</TableHead>
-          <TableHead className={"text-black dark:text-white"}>Price</TableHead>
-          <TableHead className={"text-black dark:text-white"}>1h%</TableHead>
-          <TableHead className={"text-black dark:text-white"}>24h%</TableHead>
-          <TableHead className={"text-black dark:text-white"}>7d%</TableHead>
-          <TableHead className={"text-black dark:text-white"}>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
+            Number
+          </TableHead>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
+            Name
+          </TableHead>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
+            Price
+          </TableHead>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
+            1h%
+          </TableHead>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
+            24h%
+          </TableHead>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
+            7d%
+          </TableHead>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
             24h volume/market cap
           </TableHead>
-          <TableHead className={"text-black dark:text-white"}>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
             Circulating/Total supply
           </TableHead>
-          <TableHead className={"text-black dark:text-white"}>
+          <TableHead
+            className={"text-black dark:text-white hidden sm:table-cell"}
+          >
             Last 7d
           </TableHead>
         </TableRow>
@@ -45,39 +75,45 @@ const CoinTable = ({ coinList }) => {
 
           return (
             <TableRow key={item.id}>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <p>{index + 1}</p>
               </TableCell>
               <TableCell>
-                <div className="flex">
+                <div className="flex w-[120px] sm:w-full">
                   <img src={item.image} className="w-[32px]"></img>
+                  {/* Desktop */}
                   <Link
-                    className="self-center pl-3"
+                    className="self-center pl-3 hidden sm:block"
                     href={`/coin/${item.id}`}
                   >{`${item.name}[${item.symbol.toUpperCase()}]`}</Link>
+                  {/* Mobile */}
+                  <Link
+                    className="self-center pl-3 sm:hidden"
+                    href={`/coin/${item.id}`}
+                  >{`${item.symbol.toUpperCase()}`}</Link>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <p className="w-[80px]">{`$${item.current_price.toFixed(
                   2
                 )}`}</p>
               </TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <CoinPercentage price_percentage={priceChange1h} />
               </TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <CoinPercentage price_percentage={priceChange24h} />
               </TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <CoinPercentage price_percentage={priceChange7d} />
               </TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <Progress
                   value={(item.total_volume / item.market_cap) * 100}
                   className="w-[228px] h-[6px]"
                 />
               </TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <Progress
                   value={(item.circulating_supply / item.total_supply) * 100}
                   className="w-[228px] h-[6px]"
@@ -87,6 +123,12 @@ const CoinTable = ({ coinList }) => {
                 <div>
                   <CoinTableChart data={item.sparkline_in_7d.price} />
                 </div>
+              </TableCell>
+              <TableCell className={"sm:hidden"}>
+                <p className="w-[80px]">{`$${item.current_price.toFixed(
+                  2
+                )}`}</p>
+                <CoinPercentage price_percentage={priceChange24h} />
               </TableCell>
             </TableRow>
           );

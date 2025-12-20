@@ -112,6 +112,8 @@ const PortfolioPage = () => {
           <input
             type={"number"}
             onChange={(e) => dispatch(setSelectedAmount(e.target.value))}
+            className="rounded-md border p-2"
+            placeholder="Amount of coins"
           />
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
